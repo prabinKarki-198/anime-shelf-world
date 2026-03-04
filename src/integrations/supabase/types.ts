@@ -14,7 +14,41 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      favorites: {
+        Row: {
+          id: string
+          user_id: string
+          manga_id: string
+          manga_title: string | null
+          cover_url: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          manga_id: string
+          manga_title?: string | null
+          cover_url?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          manga_id?: string
+          manga_title?: string | null
+          cover_url?: string | null
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [_ in never]: never

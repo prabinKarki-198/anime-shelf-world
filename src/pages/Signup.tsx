@@ -24,12 +24,19 @@ export default function Signup() {
     }
   }, [user, navigate]);
 
+  useEffect(() => {
+    document.title = 'Sign Up - Manga Verse';
+    return () => {
+      document.title = 'Manga Verse';
+    };
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
       toast({
-        variant: 'destructive',
+        variant: 'warning',
         title: 'Passwords do not match',
         description: 'Please make sure your passwords match.',
       });
@@ -38,7 +45,7 @@ export default function Signup() {
 
     if (password.length < 6) {
       toast({
-        variant: 'destructive',
+        variant: 'warning',
         title: 'Password too short',
         description: 'Password must be at least 6 characters long.',
       });
@@ -57,6 +64,7 @@ export default function Signup() {
       });
     } else {
       toast({
+        variant: 'success',
         title: 'Account created!',
         description: 'Please check your email to verify your account.',
       });

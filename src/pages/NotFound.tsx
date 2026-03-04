@@ -5,7 +5,11 @@ const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
+    document.title = '404 Not Found - Manga Verse';
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+    return () => {
+      document.title = 'Manga Verse';
+    };
   }, [location.pathname]);
 
   return (

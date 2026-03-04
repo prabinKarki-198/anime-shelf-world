@@ -63,6 +63,16 @@ export default function ChapterReader() {
     }
   }, [pages, preloaded]);
 
+  // Update page title with chapter info
+  useEffect(() => {
+    if (currentChapterNum) {
+      document.title = `Chapter ${currentChapterNum} - Manga Verse`;
+    }
+    return () => {
+      document.title = 'Manga Verse';
+    };
+  }, [currentChapterNum]);
+
   // Keyboard navigation (placeholder for prev/next chapter)
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
