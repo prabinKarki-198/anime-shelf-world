@@ -1,4 +1,4 @@
-# Anime Shelf World
+# Manga Verse
 
 A manga browsing and reading application built with React, TypeScript, and Vite.
 

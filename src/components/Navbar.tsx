@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Moon, Sun, Menu, X, BookOpen, LogIn, LogOut, User } from 'lucide-react';
+import { Moon, Sun, Menu, X, BookOpen, LogIn, LogOut, User, Heart } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -17,6 +17,7 @@ const links = [
   { to: '/', label: 'Home' },
   { to: '/search', label: 'Search' },
   { to: '/genres', label: 'Genres' },
+  { to: '/library', label: 'Library', icon: Heart },
 ];
 
 export function Navbar() {
@@ -78,6 +79,13 @@ export function Navbar() {
                         </p>
                       </div>
                     </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild className="cursor-pointer">
+                      <Link to="/library" className="flex items-center">
+                        <Heart className="h-4 w-4 mr-2" />
+                        My Library
+                      </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut} className="text-red-600 dark:text-red-400 cursor-pointer">
                       <LogOut className="h-4 w-4 mr-2" />

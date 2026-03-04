@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useTags, useMangaByTag } from '@/hooks/useMangaDex';
 import { MangaCard } from '@/components/MangaCard';
 import { MangaCardSkeleton } from '@/components/MangaCardSkeleton';
@@ -12,6 +12,13 @@ export default function GenresPage() {
   const [selectedTag, setSelectedTag] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const { data: tagsData, isLoading: tagsLoading, isError: tagsError, refetch: refetchTags } = useTags();
+
+  useEffect(() => {
+    document.title = 'Genres - Manga Verse';
+    return () => {
+      document.title = 'Manga Verse';
+    };
+  }, []);
   const { data: mangaData, isLoading: mangaLoading, isError: mangaError, refetch: refetchManga } = useMangaByTag(selectedTag, currentPage, LIMIT);
 
   const total = mangaData?.total || 0;

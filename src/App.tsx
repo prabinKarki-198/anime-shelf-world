@@ -5,12 +5,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { FavoritesProvider } from "@/contexts/FavoritesContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Navbar } from "@/components/Navbar";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import SearchPage from "./pages/Search";
 import GenresPage from "./pages/Genres";
+import FavoritesPage from "./pages/Favorites";
 import MangaDetail from "./pages/MangaDetail";
 import ChapterReader from "./pages/ChapterReader";
 import Login from "./pages/Login";
@@ -40,6 +42,7 @@ function AppLayout() {
         <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
         <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
         <Route path="/genres" element={<ProtectedRoute><GenresPage /></ProtectedRoute>} />
+        <Route path="/library" element={<ProtectedRoute><FavoritesPage /></ProtectedRoute>} />
         <Route path="/manga/:id" element={<ProtectedRoute><MangaDetail /></ProtectedRoute>} />
         <Route path="/read/:chapterId" element={<ProtectedRoute><ChapterReader /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
@@ -53,13 +56,15 @@ const App = () => (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <AppLayout />
-            </BrowserRouter>
-          </TooltipProvider>
+          <FavoritesProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <AppLayout />
+              </BrowserRouter>
+            </TooltipProvider>
+          </FavoritesProvider>
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>

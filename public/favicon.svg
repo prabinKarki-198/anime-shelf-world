@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bookGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6"/>
+      <stop offset="100%" style="stop-color:#6366F1"/>
+    </linearGradient>
+    <linearGradient id="pageGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#F1F5F9"/>
+      <stop offset="100%" style="stop-color:#E2E8F0"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Book back cover -->
+  <rect x="8" y="8" width="40" height="52" rx="3" fill="url(#bookGrad)" />
+  
+  <!-- Book pages -->
+  <rect x="12" y="10" width="34" height="48" rx="2" fill="url(#pageGrad)" />
+  
+  <!-- Front cover -->
+  <rect x="14" y="8" width="38" height="52" rx="3" fill="url(#bookGrad)" />
+  
+  <!-- Manga panel lines (representing manga pages) -->
+  <rect x="18" y="14" width="30" height="18" rx="1" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1"/>
+  <line x1="30" y1="14" x2="30" y2="32" stroke="#CBD5E1" stroke-width="1"/>
+  <line x1="18" y1="24" x2="30" y2="24" stroke="#CBD5E1" stroke-width="1"/>
+  
+  <!-- Bottom panel -->
+  <rect x="18" y="36" width="30" height="18" rx="1" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1"/>
+  <line x1="36" y1="36" x2="36" y2="54" stroke="#CBD5E1" stroke-width="1"/>
+  
+  <!-- Star accent -->
+  <path d="M52 12 L54 18 L60 18 L55 22 L57 28 L52 24 L47 28 L49 22 L44 18 L50 18 Z" fill="#FBBF24"/>
+</svg>

@@ -15,6 +15,13 @@ export default function SearchPage() {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
+    document.title = 'Search - Manga Verse';
+    return () => {
+      document.title = 'Manga Verse';
+    };
+  }, []);
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(input.trim());
       setCurrentPage(1); // Reset to page 1 when query changes
