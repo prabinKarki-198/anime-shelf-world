@@ -1,7 +1,12 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Heart } from 'lucide-react';
 import { getCoverUrl, getTitle } from '@/lib/mangadex';
 import { ImageWithFallback } from './ImageWithFallback';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useFavorites } from '@/contexts/FavoritesContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 import type { MangaEntity } from '@/lib/types';
 
 interface MangaCardProps {
@@ -9,6 +14,11 @@ interface MangaCardProps {
 }
 
 export function MangaCard({ manga }: MangaCardProps) {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const { isFavorited, toggleFavorite } = useFavorites();
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
+
   const enAltTitle = manga.attributes.altTitles?.find(
     (titleObj) => titleObj.en
   )?.en;
@@ -20,6 +30,39 @@ export function MangaCard({ manga }: MangaCardProps) {
   const coverUrl = coverFile ? getCoverUrl(manga.id, coverFile, '256') : '/placeholder.svg';
   const author = manga.relationships.find(r => r.type === 'author');
   const authorName = author?.attributes?.name as string | undefined;
+  const favorited = isFavorited(manga.id);
+
+  const handleFavoriteClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!user) {
+      toast({
+        variant: 'warning',
+        title: 'Login Required',
+        description: 'Please login to add favorites.',
+      });
+      return;
+    }
+    
+    setFavoriteLoading(true);
+    const { error } = await toggleFavorite(manga.id, title, coverUrl);
+    if (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: error.message,
+      });
+    } else {
+      toast({
+        variant: 'success',
+        title: favorited ? 'Removed from library' : 'Added to library',
+        description: favorited ? `${title} removed` : `${title} added`,
+      });
+    }
+    setFavoriteLoading(false);
+  };
+
   return (
     <Link
       to={`/manga/${manga.id}`}
@@ -32,6 +75,22 @@ export function MangaCard({ manga }: MangaCardProps) {
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        
+        {/* Favorite button */}
+        <button
+          onClick={handleFavoriteClick}
+          disabled={favoriteLoading}
+          className="absolute top-2 right-2 p-1 transition-all duration-200 hover:scale-110"
+          aria-label={favorited ? 'Remove from favorites' : 'Add to favorites'}
+        >
+          <Heart 
+            className={`h-5 w-5 drop-shadow-[0_2px_3px_rgba(0,0,0,0.5)] transition-all duration-200 ${
+              favorited 
+                ? 'text-red-500 fill-red-500' 
+                : 'text-white/80 opacity-0 group-hover:opacity-100 hover:text-red-500 hover:fill-red-500/50'
+            }`} 
+          />
+        </button>
       </div>
       <div className="p-3 h-full bg-gradient-to-t from-slate-50 to-transparent dark:from-gray-900 dark:to-transparent">
         <TooltipProvider>

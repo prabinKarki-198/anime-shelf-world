@@ -24,6 +24,13 @@ export default function Login() {
     }
   }, [user, navigate]);
 
+  useEffect(() => {
+    document.title = 'Login - Manga Verse';
+    return () => {
+      document.title = 'Manga Verse';
+    };
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -38,6 +45,7 @@ export default function Login() {
       });
     } else {
       toast({
+        variant: 'success',
         title: 'Welcome back!',
         description: 'You have successfully logged in.',
       });

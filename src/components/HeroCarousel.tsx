@@ -1,7 +1,10 @@
 import { useState, useEffect, useCallback, memo } from 'react';
 import { Link } from 'react-router-dom';
-import { Play, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, Plus, ChevronLeft, ChevronRight, Heart, Check } from 'lucide-react';
 import { getCoverUrl, getTitle, getDescription } from '@/lib/mangadex';
+import { useFavorites } from '@/contexts/FavoritesContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 import type { MangaEntity } from '@/lib/types';
 
 interface HeroCarouselProps {
@@ -12,6 +15,11 @@ interface HeroCarouselProps {
 const HeroCarousel = memo(({ mangas, loading }: HeroCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
+  
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const { isFavorited, toggleFavorite } = useFavorites();
 
   // Auto-advance carousel
   useEffect(() => {
@@ -61,9 +69,42 @@ const HeroCarousel = memo(({ mangas, loading }: HeroCarouselProps) => {
   const coverRel = currentManga?.relationships?.find(r => r.type === 'cover_art');
   const coverFile = coverRel?.attributes?.fileName as string | undefined;
   const coverUrl = coverFile ? getCoverUrl(currentManga.id, coverFile, '512') : '';
-  const title = getTitle(currentManga?.attributes?.title);
+   const enAltTitle = currentManga.attributes.altTitles?.find(
+    (titleObj) => titleObj.en
+  )?.en;
+
+  const title = enAltTitle || getTitle(currentManga.attributes.title);
   const description = getDescription(currentManga?.attributes?.description);
   const tags = currentManga?.attributes?.tags?.slice(0, 4) || [];
+  const isCurrentFavorited = isFavorited(currentManga.id);
+
+  const handleAddToLibrary = async () => {
+    if (!user) {
+      toast({
+        variant: 'warning',
+        title: 'Login Required',
+        description: 'Please login to add favorites.',
+      });
+      return;
+    }
+    
+    setFavoriteLoading(true);
+    const { error } = await toggleFavorite(currentManga.id, title, coverUrl);
+    if (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: error.message,
+      });
+    } else {
+      toast({
+        variant: 'success',
+        title: isCurrentFavorited ? 'Removed from library' : 'Added to library',
+        description: isCurrentFavorited ? `${title} removed` : `${title} added`,
+      });
+    }
+    setFavoriteLoading(false);
+  };
 
   return (
     <section className="relative h-[80vh] min-h-[500px] max-h-[800px] overflow-hidden bg-slate-100 dark:bg-black">
@@ -143,10 +184,25 @@ const HeroCarousel = memo(({ mangas, loading }: HeroCarouselProps) => {
                 Read Now
               </Link>
               <button
-                className="inline-flex items-center gap-2 px-6 py-3 bg-slate-900/10 hover:bg-slate-900/20 text-slate-900 dark:bg-white/10 dark:hover:bg-white/20 dark:text-white font-semibold rounded-full backdrop-blur-sm border border-slate-900/20 dark:border-white/20 transition-all duration-300 hover:scale-105"
+                onClick={handleAddToLibrary}
+                disabled={favoriteLoading}
+                className={`inline-flex items-center gap-2 px-6 py-3 font-semibold rounded-full backdrop-blur-sm border transition-all duration-300 hover:scale-105 ${
+                  isCurrentFavorited
+                    ? 'bg-red-500/20 hover:bg-red-500/30 text-red-600 dark:text-red-400 border-red-500/30'
+                    : 'bg-slate-900/10 hover:bg-slate-900/20 text-slate-900 dark:bg-white/10 dark:hover:bg-white/20 dark:text-white border-slate-900/20 dark:border-white/20'
+                }`}
               >
-                <Plus className="h-5 w-5" />
-                Add to Library
+                {isCurrentFavorited ? (
+                  <>
+                    <Heart className="h-5 w-5 fill-current" />
+                    In Library
+                  </>
+                ) : (
+                  <>
+                    <Plus className="h-5 w-5" />
+                    Add to Library
+                  </>
+                )}
               </button>
             </div>
           </div>

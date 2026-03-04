@@ -67,6 +67,10 @@ const Index = () => {
   } = useAppSelector((state) => state.manga);
 
   useEffect(() => {
+    document.title = 'Manga Verse - Home';
+  }, []);
+
+  useEffect(() => {
     dispatch(fetchPopular(currentPage));
     dispatch(fetchTrending(currentPage));
     dispatch(fetchTopRated(currentPage));
