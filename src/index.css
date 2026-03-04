@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 240 10% 6%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 6%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 6%;
+
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 5% 93%;
+    --secondary-foreground: 240 10% 20%;
+
+    --muted: 240 5% 93%;
+    --muted-foreground: 240 4% 46%;
+
+    --accent: 262 50% 94%;
+    --accent-foreground: 262 83% 40%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 262 83% 58%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 262 50% 94%;
+    --sidebar-accent-foreground: 262 83% 40%;
+    --sidebar-border: 240 6% 90%;
+    --sidebar-ring: 262 83% 58%;
+  }
+
+  .dark {
+    --background: 240 10% 4%;
+    --foreground: 0 0% 95%;
+
+    --card: 240 10% 7%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 240 10% 7%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 262 83% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 6% 14%;
+    --secondary-foreground: 0 0% 90%;
+
+    --muted: 240 6% 14%;
+    --muted-foreground: 240 4% 55%;
+
+    --accent: 262 40% 18%;
+    --accent-foreground: 262 83% 80%;
+
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 6% 16%;
+    --input: 240 6% 16%;
+    --ring: 262 83% 65%;
+
+    --sidebar-background: 240 10% 5%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 262 83% 65%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 262 40% 18%;
+    --sidebar-accent-foreground: 262 83% 80%;
+    --sidebar-border: 240 6% 16%;
+    --sidebar-ring: 262 83% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Smooth scrolling for reader */
+html {
+  scroll-behavior: smooth;
+}
