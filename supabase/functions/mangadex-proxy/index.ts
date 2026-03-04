@@ -1,11 +1,13 @@
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
 Deno.serve(async (req) => {
+  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response('ok', { status: 200, headers: corsHeaders });
   }
 
   try {
@@ -20,7 +22,8 @@ Deno.serve(async (req) => {
     }
 
     // Build MangaDex URL with remaining query params
-    const mangadexUrl = new URL(`https://api.mangadex.org${path}`);
+    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    const mangadexUrl = new URL(`https://api.mangadex.org${cleanPath}`);
     url.searchParams.forEach((value, key) => {
       if (key !== 'path') {
         mangadexUrl.searchParams.append(key, value);

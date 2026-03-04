@@ -57,7 +57,10 @@ export default function MangaDetail() {
   // Update page title when manga is loaded
   useEffect(() => {
     if (mangaRes?.data) {
-      const mangaTitle = getTitle(mangaRes.data.attributes.title);
+      const mangaTiles= mangaRes.data.attributes.altTitles?.find(
+    (titleObj) => titleObj.en,
+  )?.en;
+      const mangaTitle = mangaTiles || getTitle(mangaRes.data.attributes.title);
       document.title = `${mangaTitle} - Manga Verse`;
     }
     return () => {

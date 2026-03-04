@@ -1,19 +1,29 @@
-const MANGADEX_API = "https://api.mangadex.org";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export async function mangadexFetch<T = unknown>(path: string, params?: Record<string, string | string[]>): Promise<T> {
-  const url = new URL(`${MANGADEX_API}/${path}`);
+  // Build query string for the proxy
+  const queryParams = new URLSearchParams();
+  queryParams.set('path', path);
 
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
       if (Array.isArray(value)) {
-        value.forEach(v => url.searchParams.append(key, v));
+        value.forEach(v => queryParams.append(key, v));
       } else {
-        url.searchParams.set(key, value);
+        queryParams.set(key, value);
       }
     });
   }
 
-  const response = await fetch(url.toString());
+  const proxyUrl = `${SUPABASE_URL}/functions/v1/clever-worker?${queryParams.toString()}`;
+
+  const response = await fetch(proxyUrl, {
+    headers: {
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      'Content-Type': 'application/json',
+    },
+  });
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: 'Unknown error' }));
