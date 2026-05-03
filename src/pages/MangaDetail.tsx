@@ -60,7 +60,10 @@ export default function MangaDetail() {
       const mangaTiles= mangaRes.data.attributes.altTitles?.find(
     (titleObj) => titleObj.en,
   )?.en;
-      const mangaTitle = mangaTiles || getTitle(mangaRes.data.attributes.title);
+      const mangaTitle = mangaTiles ||
+      
+      
+      getTitle(mangaRes.data.attributes.title);
       document.title = `${mangaTitle} - Manga Verse`;
     }
     return () => {
